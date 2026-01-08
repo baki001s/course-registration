@@ -7,7 +7,10 @@ const Student = require("./models/Student"); // Fixed case-sensitive path
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
 
 // Use environment variable or replace with your actual MongoDB Atlas connection string
@@ -15,7 +18,10 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/studen
 
 mongoose.connect(MONGODB_URI)
 .then(() => console.log("MongoDB connected"))
-.catch(err => console.log(err));
+.catch(err => {
+  console.error("MongoDB connection failed:", err);
+  process.exit(1);
+});
 
 // Routes
 app.get('/', (req, res) => {
@@ -24,11 +30,22 @@ app.get('/', (req, res) => {
 
 app.post('/api/students', async (req, res) => {
   try {
-    const student = new Student(req.body);
+    const { name, email, course, semester } = req.body;
+    
+    // Input validation
+    if (!name || !email || !course || !semester) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    
+    const student = new Student({ name, email, course, semester });
     await student.save();
     res.status(201).json(student);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Server error' });
+    }
   }
 });
 
