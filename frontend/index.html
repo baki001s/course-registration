@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Student Registration Form</h2>
+
+    <form id="studentForm">
+        <input type="text" id="name" placeholder="Student Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+
+        <select id="course" required>
+            <option value="">Select Course</option>
+            <option>Web Development</option>
+            <option>Data Science</option>
+            <option>AI & ML</option>
+            <option>Cyber Security</option>
+        </select>
+
+        <select id="semester" required>
+            <option value="">Select Semester</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+        </select>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <h3>Registered Students</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Course</th>
+                <th>Semester</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable"></tbody>
+    </table>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
