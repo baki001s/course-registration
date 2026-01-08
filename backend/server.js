@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require('dotenv').config();
 
-const Student = require("./models/student"); // correct path
+const Student = require("./models/Student"); // Fixed case-sensitive path
 
 const app = express();
 
