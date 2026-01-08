@@ -17,6 +17,32 @@ mongoose.connect(MONGODB_URI)
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.log(err));
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+// Routes
+app.get('/', (req, res) => {
+  res.json({ message: 'Student Registration API' });
+});
+
+app.post('/api/students', async (req, res) => {
+  try {
+    const student = new Student(req.body);
+    await student.save();
+    res.status(201).json(student);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.get('/api/students', async (req, res) => {
+  try {
+    const students = await Student.find();
+    res.json(students);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
